@@ -17,8 +17,7 @@ class CategoryController extends Controller
     {
         return view('admin.categories.index', [
       'categories' => Category::paginate(10)
-   ]);
-
+      ]);
     }
 
     /**
@@ -28,7 +27,11 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.categories.create', [
+          'category'   => [],
+          'categories' => Category::with('children')->where('parent_id', '0')->get(),
+          'delimiter'  => ''
+        ]);
     }
 
     /**
@@ -37,9 +40,10 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+     public function store(Request $request)
     {
-        //
+        Category::create($request->all());
+        return redirect()->route('admin.category.index');
     }
 
     /**
